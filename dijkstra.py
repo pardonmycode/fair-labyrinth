@@ -41,4 +41,9 @@ def solve(maze):
 
     # Zero nodes visited, and not completed yet.
     count = 0
-    completed = False
+    completed = Falsefrom FibonacciHeap import FibHeap
+from priority_queue import FibPQ, HeapPQ, QueuePQ
+
+def solve(maze):
+    # Width is used for indexing, total is used for array sizes
+    width = maze.width
