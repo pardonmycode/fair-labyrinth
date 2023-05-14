@@ -4,33 +4,39 @@ def solve(maze):
     start = maze.start
     end = maze.end
 
-from collections import deque
+    width = maze.width
 
-def solve(maze):
-    start = maze.start
-    end = maze.end
+    queue = deque([start])
+    shape = (maze.height, maze.width)
+    prev = [None] * (maze.width * maze.height)
+    visited = [False] * (maze.width * maze.height)
 
-from collections import deque
+    count = 0
 
-def solve(maze):
-    start = maze.start
-    end = maze.end
+    completed = False
 
-from collections import deque
+    visited[start.Position[0] * width + start.Position[1]] = True
 
-def solve(maze):
-    start = maze.start
-    end = maze.end
+    while queue:
+        count += 1
+        current = queue.pop()
 
-from collections import deque
+        if current == end:
+            completed = True
+            break
 
-def solve(maze):
-    start = maze.start
-    end = maze.end
+        for n in current.Neighbours:
+            if n != None:
+                npos = n.Position[0] * width + n.Position[1]
+                if visited[npos] == False:
+                    queue.appendleft(n)
+                    visited[npos] = True
+                    prev[npos] = current
 
-from collections import deque
+    path = deque()
+    current = end
+    while (current != None):
+        path.appendleft(current)
+        current = prev[current.Position[0] * width + current.Position[1]]
 
-def solve(maze):
-    start = maze.start
-    end = maze.end
-
+    return [path, [count, len(path), completed]]

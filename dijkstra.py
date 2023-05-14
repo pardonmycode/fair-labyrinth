@@ -41,21 +41,67 @@ def solve(maze):
 
     # Zero nodes visited, and not completed yet.
     count = 0
-    completed = Falsefrom FibonacciHeap import FibHeap
-from priority_queue import FibPQ, HeapPQ, QueuePQ
+    completed = False
 
-def solve(maze):
-    # Width is used for indexing, total is used for array sizes
-    width = maze.width
-from FibonacciHeap import FibHeap
-from priority_queue import FibPQ, HeapPQ, QueuePQ
+    # Begin Dijkstra - continue while there are unvisited nodes in the queue
+    while len(unvisited) > 0:
+        count += 1
 
-def solve(maze):
-    # Width is used for indexing, total is used for array sizes
-    width = maze.width
-from FibonacciHeap import FibHeap
-from priority_queue import FibPQ, HeapPQ, QueuePQ
+        # Find current shortest path point to explore
+        n = unvisited.removeminimum()
 
-def solve(maze):
-    # Width is used for indexing, total is used for array sizes
-    width = maze.width
+        # Current node u, all neighbours will be v
+        u = n.value
+        upos = u.Position
+        uposindex = upos[0] * width + upos[1]
+
+        if distances[uposindex] == infinity:
+            break
+
+        # If upos == endpos, we're done!
+        if upos == endpos:
+            completed = True
+            break
+
+        for v in u.Neighbours:
+            if v != None:
+                vpos = v.Position
+                vposindex = vpos[0] * width + vpos[1]
+
+                if visited[vposindex] == False:
+                    # The extra distance from where we are (upos) to the neighbour (vpos) - this is manhattan distance
+                    # https://en.wikipedia.org/wiki/Taxicab_geometry
+                    d = abs(vpos[0] - upos[0]) + abs(vpos[1] - upos[1])
+
+                    # New path cost to v is distance to u + extra
+                    newdistance = distances[uposindex] + d
+
+                    # If this new distance is the new shortest path to v
+                    if newdistance < distances[vposindex]:
+                        vnode = nodeindex[vposindex]
+                        # v isn't already in the priority queue - add it
+                        if vnode == None:
+                            vnode = FibHeap.Node(newdistance, v)
+                            unvisited.insert(vnode)
+                            nodeindex[vposindex] = vnode
+                            distances[vposindex] = newdistance
+                            prev[vposindex] = u
+                        # v is already in the queue - decrease its key to re-prioritise it
+                        else:
+                            unvisited.decreasekey(vnode, newdistance)
+                            distances[vposindex] = newdistance
+                            prev[vposindex] = u
+
+        visited[uposindex] = True
+
+
+    # We want to reconstruct the path. We start at end, and then go prev[end] and follow all the prev[] links until we're back at the start
+    from collections import deque
+
+    path = deque()
+    current = end
+    while (current != None):
+        path.appendleft(current)
+        current = prev[current.Position[0] * width + current.Position[1]]
+
+    return [path, [count, len(path), completed]]

@@ -4,18 +4,6 @@ import itertools
 
 from FibonacciHeap import FibHeap
 import heapq
-
-from abc import ABCMeta, abstractmethod
-import itertools
-
-from FibonacciHeap import FibHeap
-import heapq
-
-from abc import ABCMeta, abstractmethod
-import itertools
-
-from FibonacciHeap import FibHeap
-import heapq
 import Queue
 
 class PriorityQueue():
@@ -36,55 +24,107 @@ class PriorityQueue():
     @abstractmethod
     def decreasekey(self, node, new_priority): pass
 
+class FibPQ(PriorityQueue):
+    def __init__(self):
+        self.heap = FibHeap()
 
-from abc import ABCMeta, abstractmethod
-import itertools
+    def __len__(self):
+        return self.heap.count
 
-from FibonacciHeap import FibHeap
-import heapq
-import Queue
+    def insert(self, node):
+        self.heap.insert(node)
 
-class PriorityQueue():
-    __metaclass__ = ABCMeta
+    def minimum(self):
+        return self.heap.minimum()
 
-    @abstractmethod
-    def __len__(self): pass
+    def removeminimum(self):
+        return self.heap.removeminimum()
 
-    @abstractmethod
-    def insert(self, node): pass
+    def decreasekey(self, node, new_priority):
+        self.heap.decreasekey(node, new_priority)
 
-    @abstractmethod
-    def minimum(self): pass
+class HeapPQ(PriorityQueue):
+    def __init__(self):
+        self.pq = []
+        self.removed = set()
+        self.count = 0
 
-    @abstractmethod
-    def removeminimum(self): pass
+    def __len__(self):
+        return self.count
 
-    @abstractmethod
-    def decreasekey(self, node, new_priority): pass
+    def insert(self, node):
+        entry = node.key, node.value
+        if entry in self.removed:
+            self.removed.discard(entry)
+        heapq.heappush(self.pq, entry)
+        self.count += 1
+
+    def minimum(self):
+        priority, item = heapq.heappop(self.pq)
+        node = FibHeap.Node(priority, item)
+        self.insert(node)
+        return node
+
+    def removeminimum(self):
+        while True:
+            (priority, item) = heapq.heappop(self.pq)
+            if (priority, item) in self.removed:
+                self.removed.discard((priority, item))
+            else:
+                self.count -= 1
+                return FibHeap.Node(priority, item)
+
+    def remove(self, node):
+        entry = node.key, node.value
+        if entry not in self.removed:
+            self.removed.add(entry)
+            self.count -= 1
+
+    def decreasekey(self, node, new_priority):
+        self.remove(node)
+        node.key = new_priority
+        self.insert(node)
 
 
-from abc import ABCMeta, abstractmethod
-import itertools
+class QueuePQ(PriorityQueue):
+    def __init__(self):
+        self.pq = Queue.PriorityQueue()
+        self.removed = set()
+        self.count = 0
 
-from FibonacciHeap import FibHeap
-import heapq
-import Queue
+    def __len__(self):
+        return self.count
 
-class PriorityQueue():
-    __metaclass__ = ABCMeta
+    def insert(self, node):
+        entry = node.key, node.value
+        if entry in self.removed:
+            self.removed.discard(entry)
+        self.pq.put(entry)
+        self.count += 1
 
-    @abstractmethod
-    def __len__(self): pass
+    def minimum(self):
+        (priority, item) = self.pq.get_nowait()
+        node = FibHeap.Node(priority, item)
+        self.insert(node)
+        return node
 
-    @abstractmethod
-    def insert(self, node): pass
+    def removeminimum(self):
+        while True:
+            (priority, item) = self.pq.get_nowait()
+            if (priority, item) in self.removed:
+                self.removed.discard((priority, item))
+            else:
+                self.count -= 1
+                return FibHeap.Node(priority, item)
 
-    @abstractmethod
-    def minimum(self): pass
+    def remove(self, node):
+        entry = node.key, node.value
+        if entry not in self.removed:
+            self.removed.add(entry)
+            self.count -= 1
 
-    @abstractmethod
-    def removeminimum(self): pass
-
-    @abstractmethod
-    def decreasekey(self, node, new_priority): pass
+    def decreasekey(self, node, new_priority):
+        self.remove(node)
+        node.key = new_priority
+        self.insert(node)
 

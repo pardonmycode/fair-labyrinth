@@ -4,15 +4,57 @@ def solve(maze):
 
     path = deque([maze.start])
 
-from collections import deque
+    current = maze.start.Neighbours[2]
 
-def solve(maze):
+    if current == None:
+        return path
 
-    path = deque([maze.start])
+    heading = 2 # South
 
-from collections import deque
+    turn = 1 # Turning left, -1 for right
 
-def solve(maze):
+    startpos = maze.start.Position
+    endpos = maze.end.Position
 
-    path = deque([maze.start])
+    # N E S W - just a helpful reminder
+    # 0 1 2 3
 
+    count = 1
+
+    completed = False
+
+
+    while True:
+        path.append(current)
+        count += 1
+        position = current.Position
+        if position == startpos or position == endpos:
+            if position == endpos:
+                completed = True
+            break
+
+        n = current.Neighbours
+
+        if n[(heading - turn) % 4] != None:
+            heading = (heading - turn) % 4
+            current = n[heading]
+            continue
+
+        if n[heading] != None:
+            current = n[heading]
+            continue
+
+        if n[(heading + turn) % 4] != None:
+            heading = (heading + turn) % 4
+            current = n[heading]
+            continue
+
+        if n[(heading + 2) % 4] != None:
+            heading = (heading + 2) % 4
+            current = n[heading]
+            continue
+
+        completed = False
+        break
+
+    return [path, [count, len(path), completed]]
