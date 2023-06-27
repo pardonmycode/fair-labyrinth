@@ -131,3 +131,29 @@ def solve(maze):
     distances = [infinity] * total
 
     # The priority queue. There are multiple implementations in priority_queue.py
+from FibonacciHeap import FibHeap
+from priority_queue import FibPQ, HeapPQ, QueuePQ
+
+def solve(maze):
+    # Width is used for indexing, total is used for array sizes
+    width = maze.width
+    total = maze.width * maze.height
+
+    # Start node, end node
+    start = maze.start
+    startpos = start.Position
+    end = maze.end
+    endpos = end.Position
+
+    # Visited holds true/false on whether a node has been seen already. Used to stop us returning to nodes multiple times
+    visited = [False] * total
+
+    # Previous holds a link to the previous node in the path. Used at the end for reconstructing the route
+    prev = [None] * total
+
+    # Distances holds the distance to any node taking the best known path so far. Better paths replace worse ones as we find them.
+    # We start with all distances at infinity
+    infinity = float("inf")
+    distances = [infinity] * total
+
+    # The priority queue. There are multiple implementations in priority_queue.py
