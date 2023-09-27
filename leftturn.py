@@ -136,3 +136,29 @@ def solve(maze):
     completed = False
 
 
+from collections import deque
+
+def solve(maze):
+
+    path = deque([maze.start])
+
+    current = maze.start.Neighbours[2]
+
+    if current == None:
+        return path
+
+    heading = 2 # South
+
+    turn = 1 # Turning left, -1 for right
+
+    startpos = maze.start.Position
+    endpos = maze.end.Position
+
+    # N E S W - just a helpful reminder
+    # 0 1 2 3
+
+    count = 1
+
+    completed = False
+
+
