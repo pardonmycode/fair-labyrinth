@@ -242,3 +242,29 @@ class FibHeap:
             node.previous = self
 
 
+class FibHeap:
+
+    #### Node Class ####
+    class Node:
+        def __init__(self, key, value):
+            # key value degree mark / prev next child parent
+            self.key = key
+            self.value = value
+            self.degree = 0
+            self.mark = False
+            self.parent = self.child = None
+            self.previous = self.next = self
+
+        def issingle(self):
+            return self == self.next
+
+        def insert(self, node):
+            if node == None:
+                return
+
+            self.next.previous = node.previous
+            node.previous.next = self.next
+            self.next = node
+            node.previous = self
+
+
