@@ -144,3 +144,29 @@ def solve(maze):
         if current == end:
             completed = True
             break
+from collections import deque
+
+def solve(maze):
+    start = maze.start
+    end = maze.end
+
+    width = maze.width
+
+    queue = deque([start])
+    shape = (maze.height, maze.width)
+    prev = [None] * (maze.width * maze.height)
+    visited = [False] * (maze.width * maze.height)
+
+    count = 0
+
+    completed = False
+
+    visited[start.Position[0] * width + start.Position[1]] = True
+
+    while queue:
+        count += 1
+        current = queue.pop()
+
+        if current == end:
+            completed = True
+            break
